@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import axiosInstance from './axios'; 
+import Chart from './Chart';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+	const [areas, setAreas] = useState([]);
+	const [currentArea, setCurrentArea] = useState({
+		id: -1,
+		clicked: false,
+		coordinates: []
+	});
+
+	useEffect(() => {
+		axiosInstance.get(`/areas`)
+		.then((response) => {
+			setAreas(response.data);
+		});
+	}, []);
+
+	const onClick = (areaId) => {
+		axiosInstance.get(`/spectrum/${areaId}`)
+		.then((response) => {
+			setCurrentArea({
+				id: areaId,
+				clicked: true,
+				coordinates: response.data
+			});
+		});
+	}
+
+	return (
+		<div className='app'>
+			<Chart coordinates={currentArea.coordinates}/>
+			<ul className='area-labels'>
+				{areas.map((area) => {
+					let classes = 'area-label-item';
+					if (area.id === currentArea.id) {
+						classes += ' underlined';
+					}
+					return (
+						<li
+							className={classes}
+							onClick={() => onClick(area.id)}
+							key={area.id}
+						>
+							<span className='area-cls'>{area.name}</span>
+						</li>
+					);				
+				})}
+	  		</ul>
+		</div>
+  	);
 }
 
 export default App;
