@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import axiosInstance from './axios'; 
-import Chart from './Chart';
+import axios from './axios'; 
+import Chart from './components/Chart';
+import AreaList from './components/AreaList';
 
 const App = () => {
 	const [areas, setAreas] = useState([]);
@@ -12,43 +13,36 @@ const App = () => {
 	});
 
 	useEffect(() => {
-		axiosInstance.get(`/areas`)
+		axios
+		.get(`/areas`)
 		.then((response) => {
 			setAreas(response.data);
-		});
+		})
+		.catch((error) => console.error(error));
 	}, []);
 
-	const onClick = (areaId) => {
-		axiosInstance.get(`/spectrum/${areaId}`)
+	const fetchAreaData = (e) => {
+		const id = parseInt(e.currentTarget.getAttribute('dataid'));
+		axios
+		.get(`/spectrum/${id}`)
 		.then((response) => {
 			setCurrentArea({
-				id: areaId,
+				id,
 				clicked: true,
 				coordinates: response.data
 			});
-		});
+		})
+		.catch((error) => console.error(error));
 	}
 
 	return (
 		<div className='app'>
 			<Chart coordinates={currentArea.coordinates}/>
-			<ul className='area-labels'>
-				{areas.map((area) => {
-					let classes = 'area-label-item';
-					if (area.id === currentArea.id) {
-						classes += ' underlined';
-					}
-					return (
-						<li
-							className={classes}
-							onClick={() => onClick(area.id)}
-							key={area.id}
-						>
-							<span className='area-cls'>{area.name}</span>
-						</li>
-					);				
-				})}
-	  		</ul>
+			<AreaList
+				fetchAreaData={fetchAreaData}
+				areas={areas}
+				currentAreaId={currentArea.id}
+			/>
 		</div>
   	);
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { VictoryLine, VictoryChart, VictoryAxis, VictoryContainer } from 'victory';
+import { VictoryLine, VictoryChart, VictoryAxis } from 'victory';
 
 const Chart = (props) => {
     return (

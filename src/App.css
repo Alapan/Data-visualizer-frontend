@@ -1,33 +1,5 @@
 .app {
-  height: 1600px;
-  width: 1000px;
+  height: 70vh;
+  width: 70vw;
   margin: auto;
-}
-
-.area-labels {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  height: 40px;
-  background: #323d5a;
-}
-
-.area-label-item {
-  display: inline;
-  flex: 1 0 auto;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-}
-
-.area-cls {
-  cursor: pointer;
-}
-
-.underlined {
-  text-decoration: underline;
 }
